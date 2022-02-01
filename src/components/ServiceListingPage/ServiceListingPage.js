@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { API, graphqlOperation } from "aws-amplify";
-import { getCompany } from "../graphql/queries";
+import { getCompany } from "../../graphql/queries";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Button, Text, ResponsiveContext, ThemeContext } from "grommet";
 import { DateTime } from "luxon";
 import { useDispatch } from "react-redux";
-import { selectService } from "../features/stateSlice";
-import LoadingView from "./LoadingView";
+import { selectService } from "../../features/stateSlice";
+import LoadingView from "../Common/LoadingView";
 
 const ServiceListingItem = ({ itemInfo }) => {
   let navigate = useNavigate();

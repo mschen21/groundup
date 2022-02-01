@@ -3,7 +3,7 @@ import { Box, Heading, Text } from "grommet";
 import { useSelector } from "react-redux";
 import ReactHtmlParser from "react-html-parser";
 
-const InfoSectionCal = () => {
+const ServiceDetails = () => {
   const currentUserSelection = useSelector(
     (state) => state.current.serviceSelected
   );
@@ -32,4 +32,4 @@ const InfoSectionCal = () => {
   );
 };
 
-export default InfoSectionCal;
+export default ServiceDetails;

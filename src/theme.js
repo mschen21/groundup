@@ -72,6 +72,10 @@ export const customTheme = deepMerge(grommet, {
       background: { color: "brand" },
       border: undefined,
       color: "text",
+      padding: {
+        horizontal: "5px",
+        vertical: "2px",
+      },
     },
     secondary: {
       border: { color: "brand", width: "1px" },

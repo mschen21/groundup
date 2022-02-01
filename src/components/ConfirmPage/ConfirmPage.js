@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Spinner, Text } from "grommet";
 import { API, graphqlOperation } from "aws-amplify";
 import { useNavigate, useParams } from "react-router-dom";
-import { getBooking } from "../graphql/queries";
+import { getBooking } from "../../graphql/queries";
 import { useSelector } from "react-redux";
 
 const ConfirmPage = () => {
