@@ -41,10 +41,10 @@ const ReviewPage = () => {
       <Box direction="row-responsive" gap="medium">
         {size !== "small" ? (
           <>
-            <Box width="small">
+            <Box width="medium">
               <InfoSection />
             </Box>
-            <Box width="medium">
+            <Box width="medium" elevation="small" round pad="small">
               <DetailsPanel />
             </Box>
           </>

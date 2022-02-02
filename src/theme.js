@@ -131,16 +131,25 @@ export const customTheme = deepMerge(grommet, {
     },
   },
   formField: {
+    label: {
+      margin: {
+        horizontal: "small",
+        vertical: "small",
+      },
+    },
+    content: {
+      margin: {
+        left: "20px",
+      },
+      pad: "none",
+    },
+    extend: `flex-direction: row; justify-content: space-between;`,
     border: {
       color: "border",
       error: {
         color: "white",
       },
-      position: "inner",
       side: "bottom",
-    },
-    content: {
-      pad: "small",
     },
     disabled: {
       background: {
@@ -169,8 +178,7 @@ export const customTheme = deepMerge(grommet, {
       },
     },
     margin: {
-      bottom: "small",
+      bottom: "none",
     },
-    round: "6px",
   },
 });
