@@ -81,7 +81,7 @@ const CalendarSelection = ({ availableDates }) => {
     setAvailableSlots(avail);
   };
 
-  const datesProcessed = availableDates.map((item) =>
+  const datesProcessed = availableDates?.map((item) =>
     // convert system iso to current local time
     DateTime.fromISO(item.startTime).toISODate()
   );
@@ -118,13 +118,24 @@ const CalendarSelection = ({ availableDates }) => {
                   }
                   onClick={() => {
                     //console.log(DateTime.fromISO(date.toISOString()).toISODate());
-                    onSelect(date.toISOString());
+                    datesProcessed.includes(
+                      DateTime.fromISO(date.toISOString()).toISODate()
+                    ) && onSelect(date.toISOString());
                   }}
                   round={true}
                   fill
                 >
                   <Box alignContent="center" pad="small" align="center" fill>
-                    <Text size="medium">{day}</Text>
+                    <Text
+                      size="medium"
+                      color={
+                        !datesProcessed.includes(
+                          DateTime.fromISO(date.toISOString()).toISODate()
+                        ) && `status-disabled`
+                      }
+                    >
+                      {day}
+                    </Text>
                   </Box>
                 </Box>
               );
@@ -139,13 +150,15 @@ const CalendarSelection = ({ availableDates }) => {
               DateTime.DATE_MED_WITH_WEEKDAY
             )}
           </Heading>
-          {availableSlots.length > 0 ? (
-            availableSlots.map((slot) => (
-              <AvailableTimeSlot dateSlot={slot} key={slot.sk} />
-            ))
-          ) : (
-            <Text>No available slots.</Text>
-          )}
+          <Box direction="column" gap="small">
+            {availableSlots.length > 0 ? (
+              availableSlots.map((slot) => (
+                <AvailableTimeSlot dateSlot={slot} key={slot.sk} />
+              ))
+            ) : (
+              <Text>No available slots.</Text>
+            )}
+          </Box>
         </Box>
       )}
     </Box>

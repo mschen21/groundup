@@ -89,7 +89,7 @@ export default function CheckoutForm() {
                 customerName: currentPerson.name,
                 customerPhone: currentPerson.phone,
                 endTime: slotSelected.endTime,
-                descriptionDetails: "TEST",
+                descriptionDetails: slotSelected.details,
                 fees: 0,
                 location: slotSelected.locations,
                 price: slotSelected.currentPrice,

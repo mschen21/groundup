@@ -5,17 +5,18 @@ import PaymentSelectionType from "./PaymentSelectionType";
 import StripePaymentContent from "./StripePaymentContent";
 import { useSelector } from "react-redux";
 
-const DetailsPanel = () => {
-  const paymentType = useSelector((state) => state.payment.paymentState);
+const DetailsPanel = ({ updateActiveIndex }) => {
   const bookingDetails = useSelector((state) => state.payment.bookingDetails);
 
   return (
     <Box direction="column">
       <Box pad={{ bottom: "10px" }} fill>
-        <QuestionForm bookingDetailsPerson={bookingDetails} />
+        <QuestionForm
+          bookingDetailsPerson={bookingDetails}
+          updateActiveIndex={updateActiveIndex}
+        />
       </Box>
-      {bookingDetails && <PaymentSelectionType />}
-      {paymentType === "credit-card" && <StripePaymentContent />}
+      {/* {bookingDetails && <PaymentSelectionType />} */}
     </Box>
   );
 };

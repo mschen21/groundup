@@ -5,6 +5,11 @@ export const getCompany = `
             createdAt
             createdBy
             id
+            paymentOptions {
+                name
+                method
+                details
+            }
             services {
                 createdBy
                 id
@@ -50,8 +55,8 @@ export const listAvailabilityByService = `
 `;
 
 export const getBooking = `
-    query GetBooking($bookingId: ID!, $bookingSk: ID, $companyId: ID) {
-        getBooking(bookingId: $bookingId, bookingSk: $bookingSk, companyId: $companyId) {
+    query GetBooking($bookingId: ID!) {
+        getBooking(bookingId: $bookingId) {
             bookingId
             bookingStatus
             customerEmail
@@ -68,7 +73,28 @@ export const getBooking = `
             location
             id
             fees
+            serviceId
+            serviceDetail {
+                descriptionDetails
+            }
         }
     }
 
+`;
+
+export const getService = `
+    query GetService($serviceId: ID!) {
+        getService(serviceId: $serviceId) {
+            id
+            descriptionDetails
+            serviceName
+            sk
+            status
+            createdBy
+            maxPrice
+            minPrice
+            numAvailableLeft
+            priceStrategy
+        }
+    }
 `;

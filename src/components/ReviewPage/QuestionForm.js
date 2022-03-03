@@ -1,10 +1,10 @@
 import React from "react";
-import { Box, Button, FormField, TextInput } from "grommet";
+import { Box, Button, FormField, TextArea, TextInput } from "grommet";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { setBookingPerson } from "../../features/paymentSlice";
 
-const QuestionForm = ({ bookingDetailsPerson }) => {
+const QuestionForm = ({ bookingDetailsPerson, updateActiveIndex }) => {
   const dispatch = useDispatch();
 
   const {
@@ -13,13 +13,14 @@ const QuestionForm = ({ bookingDetailsPerson }) => {
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
+    updateActiveIndex();
     dispatch(setBookingPerson(data));
   };
 
   return (
     /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Box direction="column" gap="medium" fill="horizontal">
+      <Box direction="column" gap="medium">
         {/* register your input into the hook by invoking the "register" function */}
         <FormField
           label={
@@ -28,8 +29,6 @@ const QuestionForm = ({ bookingDetailsPerson }) => {
             </Box>
           }
           required={{ indicator: true }}
-          fill="horizontal"
-          width="large"
         >
           <TextInput
             {...register("name", { required: true })}
@@ -66,12 +65,21 @@ const QuestionForm = ({ bookingDetailsPerson }) => {
           />
         </FormField>
 
-        <TextInput
-          placeholder="Aesthetics"
-          {...register("aesthetics", { required: true })}
-          defaultValue={bookingDetailsPerson?.aesthetics}
-        />
-        {errors.aesthetics && <span>This field is required</span>}
+        <FormField
+          label={
+            <Box align="center" alignContent="center">
+              Tell us more!
+            </Box>
+          }
+          required={{ indicator: true }}
+        >
+          <TextArea
+            fill
+            {...register("details")}
+            defaultValue={bookingDetailsPerson?.details}
+          />
+        </FormField>
+        {errors.details && <span>This field is required</span>}
 
         <Button primary label="Next: Payment Details" type="submit" />
       </Box>

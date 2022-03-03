@@ -5,6 +5,7 @@ export const stateSlice = createSlice({
   initialState: {
     bookingInfo: null,
     serviceSelected: null,
+    companyInfo: null,
   },
   reducers: {
     selectBookingSlot: (state, action) => {
@@ -13,10 +14,14 @@ export const stateSlice = createSlice({
     selectService: (state, action) => {
       state.serviceSelected = action.payload;
     },
+    setCompInfo: (state, action) => {
+      state.companyInfo = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { selectBookingSlot, selectService } = stateSlice.actions;
+export const { selectBookingSlot, selectService, setCompInfo } =
+  stateSlice.actions;
 
 export default stateSlice.reducer;

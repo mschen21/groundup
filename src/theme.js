@@ -139,7 +139,7 @@ export const customTheme = deepMerge(grommet, {
     },
     content: {
       margin: {
-        left: "20px",
+        left: "8px",
       },
       pad: "none",
     },

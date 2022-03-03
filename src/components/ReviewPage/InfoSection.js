@@ -40,14 +40,14 @@ const InfoSection = () => {
           {currentUserSelection.serviceName}
         </Heading>
       </Box>
-      <Box direction="column">
+      {/* <Box direction="column">
         <Text>
           {bookingDuration(
             currentUserSelection.startTime,
             currentUserSelection.endTime
           )}
         </Text>
-      </Box>
+      </Box> */}
       <Box direction="column">
         <Text>Total Investment</Text>
         <Heading
@@ -104,6 +104,22 @@ const InfoSection = () => {
           {DateTime.fromISO(currentUserSelection.endTime).toLocaleString(
             DateTime.TIME_SIMPLE
           )}
+        </Heading>
+      </Box>
+      <Box direction="column">
+        <Text>Location</Text>
+        <Heading
+          level="3"
+          margin={{
+            vertical: "0",
+            horizontal: "0",
+            top: "0",
+            bottom: "0",
+            left: "0",
+            right: "0",
+          }}
+        >
+          {currentUserSelection.locations}
         </Heading>
       </Box>
     </Box>

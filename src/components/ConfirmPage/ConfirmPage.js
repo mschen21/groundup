@@ -1,51 +1,75 @@
 import React, { useEffect, useState } from "react";
-import { Box, Spinner, Text } from "grommet";
+import {
+  Accordion,
+  AccordionPanel,
+  Box,
+  Heading,
+  ResponsiveContext,
+  Text,
+} from "grommet";
 import { API, graphqlOperation } from "aws-amplify";
 import { useNavigate, useParams } from "react-router-dom";
 import { getBooking } from "../../graphql/queries";
-import { useSelector } from "react-redux";
+import LoadingView from "../Common/LoadingView";
+import { DateTime } from "luxon";
+import { BookingDetailsLeft, BookingDetailsRight } from "./BookingDetails";
 
 const ConfirmPage = () => {
   let params = useParams();
   let navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-
-  const companyId = useSelector(
-    (state) => state.current?.bookingInfo?.companyId
-  );
-  const startTimeBooked = useSelector(
-    (state) => state.current?.bookingInfo?.startTime
-  );
+  const [bookingInfo, setBookingInfo] = useState(null);
+  const size = React.useContext(ResponsiveContext);
 
   useEffect(() => {
     const getBookingDetails = async () => {
-      const details = await API.graphql(
+      const dt = await API.graphql(
         graphqlOperation(getBooking, {
           bookingId: params.bookingId,
-          bookingSk: `BOOK#${startTimeBooked}`,
-          companyId: companyId,
         })
       );
-      console.log(details);
+      setBookingInfo(dt.data.getBooking);
     };
 
-    if (!startTimeBooked) {
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
-    } else {
+    getBookingDetails();
+    if (bookingInfo?.bookingId) {
       setLoading(false);
-      getBookingDetails();
     }
-  }, [params, companyId, startTimeBooked, navigate]);
+  }, [params, navigate, bookingInfo?.bookingId]);
 
   return loading ? (
-    <Box align="center">
-      <Spinner />
-      <Text>Loading</Text>
-    </Box>
+    <LoadingView />
   ) : (
-    <Box>Confirm Page</Box>
+    <Box direction="column" pad="medium" fill={size !== "small" ? false : true}>
+      <Box align="center" margin={{ bottom: "20px" }}>
+        <Heading level="2">Your session is confirmed!</Heading>
+        <Text>A confirmation has been sent to your email</Text>
+      </Box>
+
+      {size !== "small" ? (
+        <Box direction="row-responsive" align="start" gap="xlarge">
+          <Box>
+            <BookingDetailsLeft
+              serviceDetails={bookingInfo.serviceDetail}
+              serviceName={bookingInfo.serviceName}
+            />
+          </Box>
+          <Box>
+            <BookingDetailsRight bookingInfo={bookingInfo} />
+          </Box>
+        </Box>
+      ) : (
+        <Accordion>
+          <AccordionPanel label="Booking info">
+            <BookingDetailsLeft
+              serviceDetails={bookingInfo.serviceDetail}
+              serviceName={bookingInfo.serviceName}
+            />
+            <BookingDetailsRight bookingInfo={bookingInfo} />
+          </AccordionPanel>
+        </Accordion>
+      )}
+    </Box>
   );
 };
 

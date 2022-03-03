@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Box, Button, Text, ResponsiveContext, ThemeContext } from "grommet";
 import { DateTime } from "luxon";
 import { useDispatch } from "react-redux";
-import { selectService } from "../../features/stateSlice";
+import { selectService, setCompInfo } from "../../features/stateSlice";
 import LoadingView from "../Common/LoadingView";
 
 const ServiceListingItem = ({ itemInfo }) => {
@@ -49,6 +49,7 @@ const ServiceListingItem = ({ itemInfo }) => {
 
 const ServiceListing = () => {
   const size = React.useContext(ResponsiveContext);
+  const dispatch = useDispatch();
 
   let { companyId } = useParams();
   const [loading, setLoading] = useState(true);
@@ -61,15 +62,15 @@ const ServiceListing = () => {
           companyId: `CO#${companyId}`,
         })
       );
-      console.log(companyResult);
       setCompanyInfo(companyResult.data.getCompany);
+      dispatch(setCompInfo(companyResult.data.getCompany));
       if (companyResult.data.getCompany?.hasOwnProperty("services")) {
         setLoading(false);
       }
     };
 
     getCompanyInfo();
-  }, [companyId]);
+  }, [companyId, dispatch]);
 
   return loading ? (
     <LoadingView />

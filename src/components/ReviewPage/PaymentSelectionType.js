@@ -1,27 +1,25 @@
 import { Box, Button } from "grommet";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectPaymentType } from "../../features/paymentSlice";
 
 const PaymentSelectionType = () => {
   const dispatch = useDispatch();
+  const paymentOptionsList = useSelector(
+    (state) => state.current.companyInfo?.paymentOptions
+  );
 
   return (
-    <Box direction="row" gap="small">
-      <Button
-        primary
-        label="Pay with Credit Card"
-        onClick={() => dispatch(selectPaymentType("credit-card"))}
-      />
-      <Button
-        primary
-        label="Pay with Zelle"
-        onClick={() => dispatch(selectPaymentType("zelle"))}
-      />
-      <Button
-        primary
-        label="Pay with Venmo"
-        onClick={() => dispatch(selectPaymentType("venmo"))}
-      />
+    <Box direction="column" gap="small">
+      {paymentOptionsList.map((option) => {
+        return (
+          <Button
+            key={option.method}
+            secondary
+            label={`Pay with ${option.name}`}
+            onClick={() => dispatch(selectPaymentType(option.method))}
+          />
+        );
+      })}
     </Box>
   );
 };

@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { API, graphqlOperation } from "aws-amplify";
-import { listAvailabilityByService } from "../../graphql/queries";
+import {
+  getCompany,
+  getService,
+  listAvailabilityByService,
+} from "../../graphql/queries";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   Accordion,
@@ -8,12 +12,17 @@ import {
   Box,
   Heading,
   ResponsiveContext,
+  Text,
+  Tip,
 } from "grommet";
 import CalendarSelection from "./CalendarSelection";
 import { DateTime } from "luxon";
 import LoadingView from "../Common/LoadingView";
 import { useDispatch, useSelector } from "react-redux";
 import ServiceDetails from "./ServiceDetails";
+import FooterSection from "../Common/FooterSection";
+import { selectService, setCompInfo } from "../../features/stateSlice";
+import { CircleInformation } from "grommet-icons";
 
 const ServiceBookingPage = () => {
   let { serviceId } = useParams();
@@ -39,28 +48,53 @@ const ServiceBookingPage = () => {
       );
       console.log(serviceResult);
       setServiceInfo(serviceResult.data.listAvailabilityByService.items);
-      if (
-        !serviceResult.data.listAvailabilityByService?.hasOwnProperty("items")
-      ) {
-        navigate("/");
-      } else {
-        setLoading(false);
-      }
+    };
+
+    const getServiceDetail = async () => {
+      const serviceInfo = await API.graphql(
+        graphqlOperation(getService, {
+          serviceId: `SER#${serviceId}`,
+        })
+      );
+      dispatch(selectService(serviceInfo.data.getService));
+
+      const compData = await API.graphql(
+        graphqlOperation(getCompany, {
+          companyId: serviceInfo.data.getService.id,
+        })
+      );
+      dispatch(setCompInfo(compData.data.getCompany));
     };
 
     if (!companyServices) {
-      navigate("/");
+      getServiceDetail();
+      getServiceInfo();
     } else {
       getServiceInfo();
     }
   }, [serviceId, dispatch, navigate, companyServices]);
 
+  useEffect(() => {
+    if (companyServices && serviceInfo) {
+      setLoading(false);
+    }
+  }, [companyServices, serviceInfo]);
+
   return loading ? (
     <LoadingView />
   ) : (
     <Box direction="column" pad="medium" fill={size !== "small" ? false : true}>
-      <Box align="center" margin={{ bottom: "20px" }}>
+      <Box
+        align="center"
+        margin={{ bottom: "20px" }}
+        direction="row"
+        gap="small"
+        alignSelf="center"
+      >
         <Heading level="2">Select date and time</Heading>
+        <Tip content="Times & locations vary by date">
+          <CircleInformation size="medium" />
+        </Tip>
       </Box>
 
       <Box direction="row-responsive" gap="medium">
@@ -79,6 +113,9 @@ const ServiceBookingPage = () => {
         )}
 
         <CalendarSelection availableDates={serviceInfo} />
+      </Box>
+      <Box align="center" margin={{ top: "20px" }}>
+        <FooterSection />
       </Box>
     </Box>
   );

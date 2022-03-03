@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Box, Text } from "grommet";
+import { Button, Box, Text, ThemeContext } from "grommet";
 import { selectBookingSlot } from "../../features/stateSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -12,11 +12,11 @@ const AvailableTimeSlot = ({ dateSlot }) => {
   const statusMessage = (message) => {
     switch (message) {
       case "available":
-        return;
+        return false;
       case "confirmed":
-        return "- already booked";
+        return true;
       case "pending":
-        return "- pending booking";
+        return true;
       default:
         return;
     }
@@ -36,13 +36,23 @@ const AvailableTimeSlot = ({ dateSlot }) => {
         navigate("/review");
       }}
       label={
-        <Box pad="small" direction="row" align="center" gap="small">
-          <Text>
-            {DateTime.fromISO(dateSlot.startTime).toLocaleString(
-              DateTime.TIME_SIMPLE
-            )}
-            {statusMessage(dateSlot.status)}
-          </Text>
+        <Box pad="xsmall" direction="column" align="start" gap="small">
+          <ThemeContext.Extend
+            value={{
+              text: {
+                extend: statusMessage(dateSlot.status)
+                  ? `text-decoration: line-through;`
+                  : ``,
+              },
+            }}
+          >
+            <Text>
+              {DateTime.fromISO(dateSlot.startTime).toLocaleString(
+                DateTime.TIME_SIMPLE
+              )}
+            </Text>
+            <Text>{dateSlot.locations}</Text>
+          </ThemeContext.Extend>
         </Box>
       }
     />
