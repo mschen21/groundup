@@ -17,12 +17,17 @@ import StripePaymentContent from "./StripePaymentContent";
 import CustomPaymentContent from "./CustomPaymentContent";
 
 const renderPanelHeader = (title, active, edit) => (
-  <Box direction="row" align="center" pad="small" gap="small">
+  <Box
+    direction="row"
+    align="center"
+    gap="small"
+    pad={{ top: "0px", bottom: "10px" }}
+  >
     <strong>
       <Text>{title}</Text>
     </strong>
     <Text color="brand">{active ? "-" : "+"}</Text>
-    {edit && <Text color="brand">edit</Text>}
+    {edit && !active && <Text color="brand">edit</Text>}
   </Box>
 );
 
@@ -54,8 +59,12 @@ const ReviewPage = () => {
     <LoadingView />
   ) : (
     <Box direction="column" pad="medium" fill={size !== "small" ? false : true}>
-      <Box align="center" margin={{ bottom: "20px" }}>
+      <Box align="center" margin={{ bottom: "2.5em" }}>
         <Heading level="2">Review your booking details</Heading>
+        <Text>
+          Family session bookings are 100% refundable up until 48 hours before
+          the session.
+        </Text>
       </Box>
 
       <Box direction="row-responsive" gap="medium" align="start">
@@ -66,7 +75,6 @@ const ReviewPage = () => {
             </Box>
             <Accordion
               width="medium"
-              pad="small"
               activeIndex={activeIndex}
               onActive={(newActiveIndex) => setActiveIndex(newActiveIndex)}
             >

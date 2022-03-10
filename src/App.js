@@ -13,7 +13,7 @@ function App() {
   return (
     // <Authenticator socialProviders={["google"]} signUpAttributes={["name"]}>
     // {({ signOut, user }) => (
-    <Grommet theme={customTheme} full plain>
+    <Grommet theme={customTheme} full>
       <Box align="center">
         <Outlet />
       </Box>

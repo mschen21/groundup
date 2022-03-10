@@ -10,7 +10,7 @@ const CalendarSelection = ({ availableDates }) => {
   const calendarTheme = {
     calendar: {
       day: {
-        extend: `box-shadow: none !important;`,
+        extend: `box-shadow: none !important; outline: 0px !important;`,
       },
       extend: `box-shadow: none !important;`,
     },
@@ -31,10 +31,6 @@ const CalendarSelection = ({ availableDates }) => {
       secondary: {
         border: { color: "brand", width: "1px" },
         color: "text",
-        padding: {
-          horizontal: "31px",
-          vertical: "30px",
-        },
         font: {
           weight: "normal",
         },
@@ -101,12 +97,13 @@ const CalendarSelection = ({ availableDates }) => {
             daysOfWeek
             bounds={calendarBounds}
             showAdjacentDays={false}
-            gridArea="calendarView"
-            fill
+            fill={true}
+            focusIndicator={false}
           >
             {({ date, day, isSelected }) => {
               return (
                 <Box
+                  margin=".5em"
                   background={
                     isSelected
                       ? "calendar-selected"
@@ -122,8 +119,15 @@ const CalendarSelection = ({ availableDates }) => {
                       DateTime.fromISO(date.toISOString()).toISODate()
                     ) && onSelect(date.toISOString());
                   }}
+                  hoverIndicator={
+                    datesProcessed.includes(
+                      DateTime.fromISO(date.toISOString()).toISODate()
+                    ) && {
+                      elevation: "medium",
+                    }
+                  }
                   round={true}
-                  fill
+                  focusIndicator={false}
                 >
                   <Box alignContent="center" pad="small" align="center" fill>
                     <Text
@@ -131,7 +135,9 @@ const CalendarSelection = ({ availableDates }) => {
                       color={
                         !datesProcessed.includes(
                           DateTime.fromISO(date.toISOString()).toISODate()
-                        ) && `status-disabled`
+                        )
+                          ? `status-disabled`
+                          : `text`
                       }
                     >
                       {day}

@@ -1,8 +1,6 @@
 import React from "react";
 import { Box } from "grommet";
 import QuestionForm from "./QuestionForm";
-import PaymentSelectionType from "./PaymentSelectionType";
-import StripePaymentContent from "./StripePaymentContent";
 import { useSelector } from "react-redux";
 
 const DetailsPanel = ({ updateActiveIndex }) => {

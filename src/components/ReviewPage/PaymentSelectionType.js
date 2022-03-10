@@ -9,7 +9,7 @@ const PaymentSelectionType = () => {
   );
 
   return (
-    <Box direction="column" gap="small">
+    <Box direction="column" gap="small" margin={{ top: "1.5em" }}>
       {paymentOptionsList.map((option) => {
         return (
           <Button

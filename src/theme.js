@@ -26,7 +26,7 @@ export const customTheme = deepMerge(grommet, {
       "graph-1": "status-warning",
     },
     font: {
-      family: "Helvetica",
+      family: "Open Sans, sans-serif",
     },
     active: {
       background: "active-background",
@@ -62,10 +62,9 @@ export const customTheme = deepMerge(grommet, {
   button: {
     default: {
       color: "text",
-      border: undefined,
       padding: {
-        horizontal: "12px",
-        vertical: "8px",
+        horizontal: "10px",
+        vertical: "10px",
       },
     },
     primary: {
@@ -73,16 +72,16 @@ export const customTheme = deepMerge(grommet, {
       border: undefined,
       color: "text",
       padding: {
-        horizontal: "5px",
-        vertical: "2px",
+        horizontal: "10px",
+        vertical: "10px",
       },
     },
     secondary: {
       border: { color: "brand", width: "1px" },
       color: "text",
       padding: {
-        horizontal: "18px",
-        vertical: "18px",
+        horizontal: "10px",
+        vertical: "10px",
       },
       font: {
         weight: "normal",
@@ -101,13 +100,9 @@ export const customTheme = deepMerge(grommet, {
     disabled: {
       opacity: "0.4",
       color: "text",
-      border: {
-        color: "#C4C4C4",
-        width: "1px",
-      },
       padding: {
-        horizontal: "18px",
-        vertical: "18px",
+        horizontal: "10px",
+        vertical: "10px",
       },
     },
     hover: {
@@ -131,26 +126,26 @@ export const customTheme = deepMerge(grommet, {
     },
   },
   formField: {
-    label: {
-      margin: {
-        horizontal: "small",
-        vertical: "small",
-      },
-    },
-    content: {
-      margin: {
-        left: "8px",
-      },
-      pad: "none",
-    },
-    extend: `flex-direction: row; justify-content: space-between;`,
-    border: {
-      color: "border",
-      error: {
-        color: "white",
-      },
-      side: "bottom",
-    },
+    // label: {
+    //   margin: {
+    //     horizontal: "small",
+    //     vertical: "small",
+    //   },
+    // },
+    // content: {
+    //   margin: {
+    //     left: "8px",
+    //   },
+    //   pad: "none",
+    // },
+    // extend: `flex-direction: row; justify-content: space-between;`,
+    // border: {
+    //   color: "border",
+    //   error: {
+    //     color: "white",
+    //   },
+    //   side: "bottom",
+    // },
     disabled: {
       background: {
         color: "status-disabled",
@@ -179,6 +174,11 @@ export const customTheme = deepMerge(grommet, {
     },
     margin: {
       bottom: "none",
+    },
+  },
+  accordion: {
+    border: {
+      style: "hidden",
     },
   },
 });

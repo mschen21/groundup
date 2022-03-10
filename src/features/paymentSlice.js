@@ -13,9 +13,13 @@ export const paymentSlice = createSlice({
     setBookingPerson: (state, action) => {
       state.bookingDetails = action.payload;
     },
+    clearPaymentType: (state, action) => {
+      state.paymentState = null;
+    },
   },
 });
 
-export const { selectPaymentType, setBookingPerson } = paymentSlice.actions;
+export const { selectPaymentType, setBookingPerson, clearPaymentType } =
+  paymentSlice.actions;
 
 export default paymentSlice.reducer;

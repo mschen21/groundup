@@ -6,13 +6,18 @@ import {
 } from "@stripe/react-stripe-js";
 import { createBooking } from "../../graphql/mutations";
 import { API, graphqlOperation } from "aws-amplify";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import LoadingView from "../Common/LoadingView";
+import { Box, Button, Text } from "grommet";
+import { clearPaymentType } from "../../features/paymentSlice";
+import { Alert } from "grommet-icons";
 
 export default function CheckoutForm() {
   let navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
+  const dispatch = useDispatch();
 
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +26,6 @@ export default function CheckoutForm() {
   const currentPerson = useSelector((state) => state.payment.bookingDetails);
 
   useEffect(() => {
-    console.log("stripe form");
     if (!stripe) {
       return;
     }
@@ -35,6 +39,7 @@ export default function CheckoutForm() {
     }
 
     stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
+      console.log("switch case");
       switch (paymentIntent.status) {
         case "succeeded":
           setMessage("Payment succeeded!");
@@ -50,7 +55,7 @@ export default function CheckoutForm() {
           break;
       }
     });
-  }, [stripe, currentPerson, slotSelected]);
+  }, [stripe, slotSelected, currentPerson]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,58 +68,51 @@ export default function CheckoutForm() {
 
     setIsLoading(true);
 
-    stripe
-      .confirmPayment({
-        elements,
-        confirmParams: {
-          // Make sure to change this to your payment completion page
-          return_url: "http://localhost:3000/confirm",
-          payment_method_data: {
-            billing_details: {
-              name: currentPerson.name,
-              email: currentPerson.email,
-            },
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: "http://localhost:3000/confirm",
+        payment_method_data: {
+          billing_details: {
+            name: currentPerson.name,
+            email: currentPerson.email,
           },
         },
-        redirect: "if_required",
-      })
-      .then(({ paymentIntent }) => {
-        if (paymentIntent.status === "succeeded") {
-          return API.graphql(
-            graphqlOperation(createBooking, {
-              input: {
-                bookingStatus: "new-paid",
-                companyId: slotSelected.companyId,
-                customerEmail: currentPerson.email,
-                customerName: currentPerson.name,
-                customerPhone: currentPerson.phone,
-                endTime: slotSelected.endTime,
-                descriptionDetails: slotSelected.details,
-                fees: 0,
-                location: slotSelected.locations,
-                price: slotSelected.currentPrice,
-                serviceId: slotSelected.id,
-                serviceName: slotSelected.serviceName,
-                startTime: slotSelected.startTime,
-              },
-            })
-          );
-        }
-      })
-      .then((result) => {
-        navigate(`/confirm/${result.data.createBooking.bookingId}`);
-      });
+      },
+      redirect: "if_required",
+    });
 
-    // This point will only be reached if there is an immediate error when
-    // confirming the payment. Otherwise, your customer will be redirected to
-    // your `return_url`. For some payment methods like iDEAL, your customer will
-    // be redirected to an intermediate site first to authorize the payment, then
-    // redirected to the `return_url`.
-    // if (error.type === "card_error" || error.type === "validation_error") {
-    //   setMessage(error.message);
-    // } else {
-    //   setMessage("An unexpected error occured.");
-    // }
+    if (!error) {
+      const bookingResult = await API.graphql(
+        graphqlOperation(createBooking, {
+          input: {
+            bookingStatus: "new-paid",
+            companyId: slotSelected.companyId,
+            customerEmail: currentPerson.email,
+            customerName: currentPerson.name,
+            customerPhone: currentPerson.phone,
+            endTime: slotSelected.endTime,
+            descriptionDetails: slotSelected.details,
+            fees: 0,
+            location: slotSelected.locations,
+            price: slotSelected.currentPrice,
+            serviceId: slotSelected.id,
+            serviceName: slotSelected.serviceName,
+            startTime: slotSelected.startTime,
+          },
+        })
+      );
+
+      if (bookingResult.data.createBooking) {
+        navigate(`/confirm/${bookingResult.data.createBooking.bookingId}`);
+      }
+    } else {
+      if (error.type === "card_error" || error.type === "validation_error") {
+        setMessage(error.message);
+      } else {
+        setMessage("An unexpected error occured.");
+      }
+    }
 
     setIsLoading(false);
   };
@@ -122,13 +120,35 @@ export default function CheckoutForm() {
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
       <PaymentElement id="payment-element" />
-      <button disabled={isLoading || !stripe || !elements} id="submit">
-        <span id="button-text">
-          {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
-        </span>
-      </button>
-      {/* Show any error or success messages */}
-      {message && <div id="payment-message">{message}</div>}
+
+      {message && (
+        <Box direction="row" gap="small" margin={{ top: "0.5em" }}>
+          <Alert color="status-critical" />
+          <Text color="status-critical">{message}</Text>
+        </Box>
+      )}
+
+      {isLoading || !stripe || !elements ? (
+        <>
+          <LoadingView />
+        </>
+      ) : (
+        <Box gap="small" margin={{ top: "1.5em", bottom: "10px" }}>
+          <Button
+            primary
+            type="submit"
+            disabled={isLoading || !stripe || !elements}
+            label={`Submit Payment`}
+            fill
+          />
+          <Button
+            secondary
+            label="Change Payment Type"
+            onClick={() => dispatch(clearPaymentType(null))}
+            fill
+          />
+        </Box>
+      )}
     </form>
   );
 }

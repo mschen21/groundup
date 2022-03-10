@@ -8,19 +8,19 @@ const InfoSection = () => {
     (state) => state.current.bookingInfo
   );
 
-  const bookingDuration = (from, to) => {
-    let end = DateTime.fromISO(to);
-    let start = DateTime.fromISO(from);
+  // const bookingDuration = (from, to) => {
+  //   let end = DateTime.fromISO(to);
+  //   let start = DateTime.fromISO(from);
 
-    let diffInMonths = end.diff(start, ["hours", "minutes"]);
-    if (diffInMonths.toObject().hours > 0) {
-      return `${diffInMonths.toObject().hours} hour${
-        diffInMonths.toObject().hours > 1 ? "s" : ""
-      } long`;
-    } else {
-      return diffInMonths.toObject().minutes;
-    }
-  };
+  //   let diffInMonths = end.diff(start, ["hours", "minutes"]);
+  //   if (diffInMonths.toObject().hours > 0) {
+  //     return `${diffInMonths.toObject().hours} hour${
+  //       diffInMonths.toObject().hours > 1 ? "s" : ""
+  //     } long`;
+  //   } else {
+  //     return diffInMonths.toObject().minutes;
+  //   }
+  // };
 
   return (
     <Box direction="column" gap="medium">

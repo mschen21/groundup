@@ -15,7 +15,6 @@ const ServiceListingItem = ({ itemInfo }) => {
   return (
     <Button
       disabled={itemInfo.nextAvailability ? false : true}
-      secondary
       onClick={() => {
         dispatch(selectService(itemInfo));
         navigate(`/service/${itemInfo.sk.substr(4)}`);

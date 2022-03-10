@@ -6,6 +6,7 @@ import CheckoutForm from "./CheckoutForm";
 import { API, graphqlOperation } from "aws-amplify";
 import { createPaymentIntent } from "../../graphql/mutations";
 import { useSelector } from "react-redux";
+import LoadingView from "../Common/LoadingView";
 
 const stripePromise = loadStripe("pk_test_NwKFOwArQCLpON3vYs7AcIH800V0euTnMu");
 
@@ -22,7 +23,7 @@ const StripePaymentContent = () => {
       );
       setClientSecret(result.data.createPaymentIntent.clientSecret);
     };
-    console.log("run");
+
     addPaymentIntent();
   }, [bookingAmount]);
 
@@ -33,7 +34,11 @@ const StripePaymentContent = () => {
     clientSecret,
     appearance,
   };
-  return (
+  return !clientSecret ? (
+    <>
+      <LoadingView />
+    </>
+  ) : (
     <Box>
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>

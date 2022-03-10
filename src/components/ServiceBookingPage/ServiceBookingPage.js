@@ -12,7 +12,6 @@ import {
   Box,
   Heading,
   ResponsiveContext,
-  Text,
   Tip,
 } from "grommet";
 import CalendarSelection from "./CalendarSelection";
@@ -97,9 +96,9 @@ const ServiceBookingPage = () => {
         </Tip>
       </Box>
 
-      <Box direction="row-responsive" gap="medium">
+      <Box direction="row-responsive" gap="medium" align="start">
         {size !== "small" ? (
-          <Box width="small">
+          <Box width="medium">
             <ServiceDetails />
           </Box>
         ) : (

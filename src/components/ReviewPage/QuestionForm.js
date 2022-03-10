@@ -23,12 +23,9 @@ const QuestionForm = ({ bookingDetailsPerson, updateActiveIndex }) => {
       <Box direction="column" gap="medium">
         {/* register your input into the hook by invoking the "register" function */}
         <FormField
-          label={
-            <Box align="center" alignContent="center">
-              Name
-            </Box>
-          }
+          label="Name"
           required={{ indicator: true }}
+          error={errors.name && `This field is required`}
         >
           <TextInput
             {...register("name", { required: true })}
@@ -37,28 +34,17 @@ const QuestionForm = ({ bookingDetailsPerson, updateActiveIndex }) => {
         </FormField>
 
         <FormField
-          label={
-            <Box align="center" alignContent="center">
-              Email
-            </Box>
-          }
+          label="Email"
           required={{ indicator: true }}
+          error={errors.email && `This field is required`}
         >
           <TextInput
             {...register("email", { required: true })}
             defaultValue={bookingDetailsPerson?.email}
           />
         </FormField>
-        {errors.email && <span>This field is required</span>}
 
-        <FormField
-          label={
-            <Box align="center" alignContent="center">
-              Phone
-            </Box>
-          }
-          required={{ indicator: true }}
-        >
+        <FormField label="Phone" required={{ indicator: true }}>
           <TextInput
             {...register("phone")}
             defaultValue={bookingDetailsPerson?.phone}
@@ -66,11 +52,8 @@ const QuestionForm = ({ bookingDetailsPerson, updateActiveIndex }) => {
         </FormField>
 
         <FormField
-          label={
-            <Box align="center" alignContent="center">
-              Tell us more!
-            </Box>
-          }
+          label="Share who will be involved in the shoot and more details about you!
+"
           required={{ indicator: true }}
         >
           <TextArea
